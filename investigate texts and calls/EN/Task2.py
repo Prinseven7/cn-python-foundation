@@ -36,3 +36,27 @@ the key's existing value. If the key does not already appear in the
 dictionary, add it and set its value to be the given value.
 """
 
+#Create dictionary for duration of each telephone number in calls, and return the list of max value
+def duration(lists):
+    phone_number_duration_dic = {}
+    max_dic = []
+    for number in range(len(lists)):
+        #For calling numbers, sum up total duration times of each
+        if lists[number][0] not in phone_number_duration_dic:
+            phone_number_duration_dic[lists[number][0]] = int(lists[number][3])
+        else:
+            phone_number_duration_dic[lists[number][0]] += int(lists[number][3])
+        #For receiving numbers, sum up total duration times of each
+        if lists[number][1] not in phone_number_duration_dic:
+            phone_number_duration_dic[lists[number][1]] = int(lists[number][3])
+        else:
+            phone_number_duration_dic[lists[number][1]] += int(lists[number][3])
+    #print(phone_number_duration_dic)   #Test result
+    #print(len(phone_number_duration_dic))  #Double check the length with Task1
+    #Reverse values and keys of dictionary, in order to use max() finding out the longest time
+    max_dic = max(zip(phone_number_duration_dic.values(),phone_number_duration_dic.keys()))
+    return max_dic
+
+target_phone_number = duration(calls)[1]
+target_duration_time = duration(calls)[0]
+print("<{}> spent the longest time, <{}> seconds, on the phone during September 2016.".format(target_phone_number, target_duration_time))
