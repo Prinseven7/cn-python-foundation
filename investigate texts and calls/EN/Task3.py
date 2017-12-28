@@ -52,3 +52,53 @@ Print the answer as a part of a message::
 to other fixed lines in Bangalore."
 The percentage should have 2 decimal digits
 """
+
+
+#Create a dictionary that includes all phone numbers called by (080) and related times
+def phone_number_filter(lists):
+    phone_called_dic = {}
+    for item in lists:
+        if '(080)' in item[0]:
+            if item[1] in phone_called_dic:
+                phone_called_dic[item[1]] += 1
+            else:
+                phone_called_dic[item[1]] = 1
+    #print(phone_called_dic)     #Check the result of the dictionary
+    return phone_called_dic
+
+all_numbers_called_dic = phone_number_filter(calls)
+all_numbers_called_list = []       #Put all numbers called by (080)
+target_number_list = []            #Put target numbers called by (080)
+code_list = []                     #Put target codes called by (080)
+n = 4                              #4 digits for mobile phone code
+
+all_numbers_called_list = sorted(all_numbers_called_dic.keys())
+#print(all_numbers_called_list)    #Check the result of the list
+
+#Get target numbers called by (080)
+for item in all_numbers_called_list:
+    if item[:2] == '(0' or item[0] == '7' or item[0] == '8' or item[0] == '9':
+        target_number_list.append(item)
+
+#Get target codes called by (080)
+for item in target_number_list:
+    for number in range(len(item)):
+        if item[number] == ')':
+            code_list.append(item[:(number+1)])
+    if item[0] == '7' or item[0] == '8' or item[0] == '9':
+        code_list.append(item[:n])
+code_list = '\n'.join(sorted(list(set(code_list))))
+
+print("The numbers called by people in Bangalore have codes: \n{}".format(code_list))
+
+target_called_times = 0
+#Get how many times (080) were called by (080)
+for key in all_numbers_called_dic.keys():
+    if '(080)' in key:
+        target_called_times += all_numbers_called_dic[key]
+#print(target_called_times)       #Check the result
+total_called_tmies = sum(all_numbers_called_dic.values())    #Get how many times all numbers were called by (080)
+print(total_called_tmies)         #Check the result
+percentage = target_called_times/total_called_tmies
+#print(percentage)     #Check the final result
+print("<{}> percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.".format('%.2f%%' % (percentage * 100)))
